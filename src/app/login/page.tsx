@@ -75,7 +75,7 @@ const Page = () => {
           <Button onClick={login}>Login</Button>
         </div>
         <div className="flex flex-col items-center">
-          Don't have an account?
+          Do not have an account?
           <Button
             onClick={routeToSignup}
             variant="ghost"

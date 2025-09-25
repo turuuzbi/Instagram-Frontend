@@ -68,7 +68,7 @@ const Page = () => {
         <div className="flex mt-10 flex-col">
           <div className="font-bold">Generate AI images</div>
           <div className="text-xs text-gray-500 mb-5">
-            Describe what's on your mind. To get the best results, be specific
+            Describe what is on your mind. To get the best results, be specific
           </div>
         </div>
         <div className="flex gap-2">
