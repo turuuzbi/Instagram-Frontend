@@ -1,6 +1,6 @@
 import UserButton from "../icons/user";
 import HomeButton from "../icons/home";
-import SearchButton from "../icons/Search";
+import SearchButton from "../icons/search";
 import AddButton from "../icons/add";
 
 export const Footer = () => {
