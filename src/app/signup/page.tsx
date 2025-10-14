@@ -9,7 +9,7 @@ import instagramLogo from "@/images/instagramLogo.png";
 import { toast } from "sonner";
 
 const Page = () => {
-  const { setUser, user } = useUser();
+  const { user } = useUser();
   const { push } = useRouter();
   const [inputValue, setInputValue] = useState({
     email: "",
@@ -27,15 +27,17 @@ const Page = () => {
         username: inputValue.username,
       }),
     });
+
     if (response.ok) {
-      const user = await response.json();
-      setUser(user);
-      localStorage.setItem("user", JSON.stringify(user));
-      toast.success("Signup successful!");
+      const res = await response.json();
+      localStorage.setItem("token", res.accessToken);
+      toast.success("Successful!");
+      push("/");
     } else {
-      toast.error("Signup unsuccessful!");
+      toast.error("Failed!");
     }
   };
+
   useEffect(() => {
     if (user) push("/");
   }, []);

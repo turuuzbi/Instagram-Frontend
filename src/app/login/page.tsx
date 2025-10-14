@@ -26,19 +26,19 @@ const Page = () => {
       }),
     });
     if (response.ok) {
-      const user = await response.json();
-      setUser(user);
-      localStorage.setItem("user", JSON.stringify(user));
+      const res = await response.json();
+      localStorage.setItem("token", res);
+      setUser(res);
       push("/");
       toast.success("Login successful!");
     } else {
-      toast.error("Login unsuccessful!");
+      toast.error("Login FAILED!");
     }
   };
 
   useEffect(() => {
     if (user) push("/");
-  }, []);
+  }, [user]);
 
   const inputValueHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
