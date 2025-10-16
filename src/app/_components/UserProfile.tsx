@@ -1,27 +1,31 @@
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { useUser } from "@/providers/AuthProvider";
 
-export const UserComp = () => {
+type UserCompProps = {
+  username: string | null | undefined;
+  bio: string | null | undefined;
+  profilePicture: string | null | undefined;
+};
+
+export const UserComp = ({ username, bio, profilePicture }: UserCompProps) => {
   const { push } = useRouter();
-  const { user } = useUser();
 
   return (
     <div>
       <div className="fixed top-0 w-full flex justify-center border-b bg-white font-bold p-2">
-        {user?.username}
+        {username}
       </div>
 
       <div className="mt-20 px-4">
         <div className="flex">
           <div className="mb-4">
             <img
-              src={user?.profilePicture}
+              src={profilePicture || undefined}
               className="w-24 h-24 rounded-full"
             />
           </div>
           <div>
-            <div className="mb-4 font-bold">{user?.username}</div>
+            <div className="mb-4 font-bold">{username}</div>
             <div className="flex gap-5">
               <div onClick={() => push("/editprofile")}>
                 <Button
@@ -33,7 +37,7 @@ export const UserComp = () => {
               </div>
             </div>
           </div>
-          <div>{user?.bio}</div>
+          <div>{bio}</div>
         </div>
       </div>
     </div>
