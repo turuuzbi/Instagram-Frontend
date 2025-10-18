@@ -10,7 +10,7 @@ import { toast } from "sonner";
 
 export default function UserPage() {
   const { token } = useUser();
-  const { follewedUserId, userId } = useParams();
+  const { followedUserId, userId } = useParams();
   const [userInfo, setUserInfo] = useState<User | null | undefined>();
 
   const getUser = async () => {
@@ -30,7 +30,7 @@ export default function UserPage() {
 
   const toggleFollow = async () => {
     const response = await fetch(
-      `http://localhost:5555/toggleFollow/${follewedUserId}`,
+      `http://localhost:5555/toggleFollow/${followedUserId}`,
       {
         method: "POST",
         headers: {
@@ -39,12 +39,15 @@ export default function UserPage() {
         },
       }
     );
+    if (response.ok) {
+      console.log("successful!");
+    }
   };
 
   useEffect(() => {
     if (token) getUser();
   }, [token]);
-
+  console.log(followedUserId);
   return (
     <div>
       <div>
