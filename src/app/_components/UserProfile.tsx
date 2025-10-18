@@ -26,16 +26,6 @@ export const UserComp = ({ username, bio, profilePicture }: UserCompProps) => {
           </div>
           <div>
             <div className="mb-4 font-bold">{username}</div>
-            <div className="flex gap-5">
-              <div onClick={() => push("/editprofile")}>
-                <Button
-                  variant="ghost"
-                  className="border bg-gray-200 font-bold mb-8"
-                >
-                  Edit Profile
-                </Button>
-              </div>
-            </div>
           </div>
           <div>{bio}</div>
         </div>

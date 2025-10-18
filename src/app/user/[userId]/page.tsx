@@ -9,10 +9,10 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 export default function UserPage() {
-  const { token } = useUser();
-  const { followedUserId, userId } = useParams();
-  const [userInfo, setUserInfo] = useState<User | null | undefined>();
-
+  const { token, user } = useUser();
+  const { userId } = useParams();
+  const [userInfo, setUserInfo] = useState<User>();
+  const [isFollowing, setIsFollowing] = useState(false);
   const getUser = async () => {
     const response = await fetch(`http://localhost:5555/user/${userId}`, {
       headers: {
@@ -23,6 +23,11 @@ export default function UserPage() {
     if (response.ok) {
       const gotUser = await response.json();
       setUserInfo(gotUser);
+      if (userInfo?.followers.includes(user?._id!)) {
+        setIsFollowing(true);
+      } else {
+        setIsFollowing(false);
+      }
     } else {
       toast.error("failed to get user :(");
     }
@@ -30,7 +35,7 @@ export default function UserPage() {
 
   const toggleFollow = async () => {
     const response = await fetch(
-      `http://localhost:5555/toggleFollow/${followedUserId}`,
+      `http://localhost:5555/toggleFollow/${userId}`,
       {
         method: "POST",
         headers: {
@@ -40,14 +45,16 @@ export default function UserPage() {
       }
     );
     if (response.ok) {
-      console.log("successful!");
+      setIsFollowing((prev) => !prev);
+    } else {
+      toast.error("failed to follow this user :(");
     }
   };
 
   useEffect(() => {
     if (token) getUser();
   }, [token]);
-  console.log(followedUserId);
+
   return (
     <div>
       <div>
@@ -60,10 +67,12 @@ export default function UserPage() {
       <div>
         <Button
           variant="ghost"
-          className="border bg-gray-200 font-bold mb-8"
+          className={`border bg-gray-200 font-bold mb-8 ${
+            isFollowing ? "bg-red-400" : "bg-blue-300"
+          }`}
           onClick={toggleFollow}
         >
-          Follow
+          {isFollowing ? "Unfollow" : "Follow"}
         </Button>
       </div>
       <Footer />
