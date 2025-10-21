@@ -8,7 +8,7 @@ export const Footer = () => {
   const { push } = useRouter();
 
   const homePush = () => push("/");
-  const searchPush = () => push("/");
+  const searchPush = () => push("/search");
   const addPush = () => push("/create");
   const userPush = () => push("/profile");
 
@@ -18,7 +18,7 @@ export const Footer = () => {
         <div onClick={homePush}>
           <HomeButton />
         </div>
-        <div>
+        <div onClick={searchPush}>
           <SearchButton />
         </div>
         <div onClick={addPush}>

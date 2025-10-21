@@ -8,6 +8,7 @@ import { User } from "@/providers/AuthProvider";
 import { Heart } from "lucide-react";
 import { MessageCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 type Posts = {
   _id: string;
@@ -57,8 +58,13 @@ export default function Home() {
         <div className="flex flex-col">
           {posts?.map((post, index) => (
             <div key={index}>
-              <div className="m-2">
-                <div>{post.user.profilePicture}</div>
+              <div className="m-2 gap-2 flex items-center">
+                <div onClick={() => push(`/user/${post.user._id}`)}>
+                  <Avatar>
+                    <AvatarImage src={post.user.profilePicture} />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                </div>
                 <div
                   className="font-bold"
                   onClick={() => push(`/user/${post.user._id}`)}
