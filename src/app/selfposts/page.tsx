@@ -3,14 +3,15 @@
 import { useUser } from "@/providers/AuthProvider";
 import { useEffect, useState } from "react";
 import { User } from "@/providers/AuthProvider";
-import { Ellipsis, Heart } from "lucide-react";
+import { Heart, MoreHorizontal } from "lucide-react";
 import { MessageCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Header } from "../_components/HomeHeader";
 import { Footer } from "../_components/Footer";
+import { EditPostDialog } from "../_components/EditPost";
 
-type Posts = {
+export type PostType = {
   _id: string;
   caption: string;
   images: string[];
@@ -19,9 +20,11 @@ type Posts = {
 };
 
 export default function Home() {
-  const [posts, setPosts] = useState<Posts[]>([]);
+  const [posts, setPosts] = useState<PostType[]>([]);
   const { token, user } = useUser();
   const { push } = useRouter();
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedPost, setSelectedPost] = useState<PostType | null>(null);
 
   const showPosts = async () => {
     const response = await fetch(
@@ -61,7 +64,7 @@ export default function Home() {
         <div className="flex flex-col">
           {posts?.map((post, index) => (
             <div key={index}>
-              <div className="m-2 gap-2 flex items-center">
+              <div className="m-2 gap-2 flex items-center relative">
                 <div onClick={() => push(`/user/${post.user._id}`)}>
                   <Avatar>
                     <AvatarImage src={user?.profilePicture} />
@@ -74,8 +77,14 @@ export default function Home() {
                 >
                   {user?.username}
                 </div>
-                <div className="absolute right-0 mr-5">
-                  <Ellipsis></Ellipsis>
+                <div
+                  className="absolute right-0 mr-5"
+                  onClick={() => {
+                    setIsOpen(true);
+                    setSelectedPost(post);
+                  }}
+                >
+                  <MoreHorizontal />
                 </div>
               </div>
               <div>
@@ -108,6 +117,13 @@ export default function Home() {
           ))}
         </div>
       </div>
+      {selectedPost && (
+        <EditPostDialog
+          isOpen={isOpen}
+          setIsOpen={setIsOpen}
+          selectedPost={selectedPost}
+        />
+      )}
       <Footer />
     </div>
   );
