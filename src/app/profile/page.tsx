@@ -6,13 +6,35 @@ import { UserPost } from "../_components/UserPost";
 import { useUser } from "@/providers/AuthProvider";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const Page = () => {
   const { push } = useRouter();
-  const { user } = useUser();
+  const { user, token } = useUser();
+  const [posts, setPosts] = useState([]);
+
   const username = user?.username;
   const bio = user?.bio;
   const profilePicture = user?.profilePicture;
+
+  const showPosts = async () => {
+    const response = await fetch(
+      `http://localhost:5555/post/user/${user?._id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    const gotposts = await response.json();
+    setPosts(gotposts);
+  };
+
+  useEffect(() => {
+    if (token) {
+      showPosts();
+    }
+  }, [token]);
 
   return (
     <div>
@@ -22,7 +44,7 @@ const Page = () => {
           Edit Profile
         </Button>
       </div>
-      <UserPost></UserPost>
+      <UserPost posts={posts}></UserPost>
       <Footer></Footer>
     </div>
   );

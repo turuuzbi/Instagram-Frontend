@@ -2,13 +2,13 @@
 
 import { useUser } from "@/providers/AuthProvider";
 import { useEffect, useState } from "react";
-import { Footer } from "./_components/Footer";
-import { Header } from "./_components/HomeHeader";
 import { User } from "@/providers/AuthProvider";
-import { Heart } from "lucide-react";
+import { Ellipsis, Heart } from "lucide-react";
 import { MessageCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Header } from "../_components/HomeHeader";
+import { Footer } from "../_components/Footer";
 
 type Posts = {
   _id: string;
@@ -24,11 +24,14 @@ export default function Home() {
   const { push } = useRouter();
 
   const showPosts = async () => {
-    const response = await fetch(`http://localhost:5555/post`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      `http://localhost:5555/post/user/${user?._id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     const gotposts = await response.json();
     setPosts(gotposts);
   };
@@ -52,7 +55,7 @@ export default function Home() {
   return (
     <div className="pb-20">
       <div className="mb-20">
-        <Header></Header>
+        <Header />
       </div>
       <div>
         <div className="flex flex-col">
@@ -61,7 +64,7 @@ export default function Home() {
               <div className="m-2 gap-2 flex items-center">
                 <div onClick={() => push(`/user/${post.user._id}`)}>
                   <Avatar>
-                    <AvatarImage src={post.user.profilePicture} />
+                    <AvatarImage src={user?.profilePicture} />
                     <AvatarFallback>CN</AvatarFallback>
                   </Avatar>
                 </div>
@@ -69,7 +72,10 @@ export default function Home() {
                   className="font-bold"
                   onClick={() => push(`/user/${post.user._id}`)}
                 >
-                  {post.user.username}
+                  {user?.username}
+                </div>
+                <div className="absolute right-0 mr-5">
+                  <Ellipsis></Ellipsis>
                 </div>
               </div>
               <div>
@@ -93,7 +99,7 @@ export default function Home() {
                   </div>
                   <div className="font-bold">{post.like.length} likes</div>
                   <div className="flex gap-3">
-                    <div className="font-extrabold">{post.user.username}</div>
+                    <div className="font-extrabold">{user?.username}</div>
                     <div>{post.caption}</div>
                   </div>
                 </div>
@@ -102,7 +108,7 @@ export default function Home() {
           ))}
         </div>
       </div>
-      <Footer></Footer>
+      <Footer />
     </div>
   );
 }

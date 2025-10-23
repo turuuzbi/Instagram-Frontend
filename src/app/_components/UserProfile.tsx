@@ -1,6 +1,3 @@
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
-
 type UserCompProps = {
   username: string | null | undefined;
   bio: string | null | undefined;
@@ -8,8 +5,6 @@ type UserCompProps = {
 };
 
 export const UserComp = ({ username, bio, profilePicture }: UserCompProps) => {
-  const { push } = useRouter();
-
   return (
     <div>
       <div className="fixed top-0 w-full flex justify-center border-b bg-white font-bold p-2">

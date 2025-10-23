@@ -16,7 +16,12 @@ const Page = () => {
       <Photopost></Photopost>
       <div className="flex flex-col mt-25 items-center  gap-2">
         <CreatePostIcon></CreatePostIcon>
-        <Button style={{ backgroundColor: "blue" }}>Photo Libary</Button>
+        <div
+          className="bg-blue-500 rounded-xl text-white"
+          onClick={() => push("/sharepost")}
+        >
+          <Button variant="ghost">Photo Libary</Button>
+        </div>
         <Button
           variant="ghost"
           className="font-bold text-blue-500"

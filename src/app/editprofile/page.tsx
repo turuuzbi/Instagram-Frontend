@@ -16,7 +16,6 @@ const Page = () => {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* top bar */}
       <div className="fixed top-0 left-0 w-full flex justify-center border-b border-gray-300 py-3 bg-white items-center">
         <div className="absolute left-3" onClick={() => push("/profile")}>
           <XButton />
@@ -24,11 +23,9 @@ const Page = () => {
         <div className="text-lg font-semibold">Edit profile</div>
       </div>
 
-      {/* content */}
       <div className="pt-20 px-4">
         <div className="text-lg font-semibold mb-3">Edit profile</div>
 
-        {/* avatar section */}
         <div className="flex items-center gap-4 bg-gray-100 rounded-xl p-3 mb-6">
           <Avatar className="h-14 w-14">
             <AvatarImage src={user?.profilePicture} />
@@ -45,9 +42,7 @@ const Page = () => {
           </div>
         </div>
 
-        {/* form fields */}
         <div className="flex flex-col gap-5">
-          
           <div>
             <label className="block text-sm font-semibold mb-1">Username</label>
             <Input
@@ -69,7 +64,6 @@ const Page = () => {
           </div>
         </div>
 
-        {/* submit button */}
         <div className="mt-8 flex justify-center">
           <Button className="w-1/2 bg-blue-100 text-gray-500" disabled>
             Submit

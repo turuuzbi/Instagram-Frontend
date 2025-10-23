@@ -82,7 +82,7 @@ const Page = () => {
   return (
     <div>
       <div className="fixed top-0 w-full flex items-center border-b border-gray-300 bg-white">
-        <div className="absolute left-0 px-3">
+        <div className="absolute left-0 px-3" onClick={() => push("/")}>
           <XButton />
         </div>
         <div className="w-full justify-center flex p-3 font-medium">
@@ -90,22 +90,33 @@ const Page = () => {
         </div>
       </div>
       <div className="mt-18">
-        <div>{commentInfo[0]?.post.user.profilePicture}</div>
-        <div className="font-bold">{commentInfo[0]?.post.user.username}</div>
-        <div>{commentInfo[0]?.post.caption}</div>
+        <div className="m-5">
+          <div className="flex items-center">
+            <Avatar>
+              <AvatarImage src={commentInfo[0]?.user.profilePicture} />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <div className="font-bold">
+              {commentInfo[0]?.post.user.username}
+            </div>
+          </div>
+          <div>{commentInfo[0]?.post.caption}</div>
+        </div>
         <div className="h-[0.5px] w-full bg-black"></div>
 
-        <div>
+        <div className="m-5 gap-5 flex flex-col">
           {commentInfo.map((c, index) => {
             return (
               <div key={index}>
-                <div onClick={() => push(`/user/${c.user._id}`)}>
-                  <Avatar>
-                    <AvatarImage src={c.user.profilePicture} />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
+                <div className="flex items-center">
+                  <div onClick={() => push(`/user/${c.user._id}`)}>
+                    <Avatar>
+                      <AvatarImage src={c.user.profilePicture} />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                  </div>
+                  <div className="font-bold">{c.user.username}</div>
                 </div>
-                <div className="font-bold">{c.user.username}</div>
                 <div>{c.comment}</div>
               </div>
             );
