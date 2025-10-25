@@ -3,7 +3,7 @@
 import { useUser } from "@/providers/AuthProvider";
 import { useEffect, useState } from "react";
 import { User } from "@/providers/AuthProvider";
-import { Heart, MoreHorizontal } from "lucide-react";
+import { Ellipsis, Heart } from "lucide-react";
 import { MessageCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -21,10 +21,10 @@ export type PostType = {
 
 export default function Home() {
   const [posts, setPosts] = useState<PostType[]>([]);
-  const { token, user } = useUser();
-  const { push } = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedPost, setSelectedPost] = useState<PostType | null>(null);
+  const { token, user } = useUser();
+  const { push } = useRouter();
 
   const showPosts = async () => {
     const response = await fetch(
@@ -64,7 +64,7 @@ export default function Home() {
         <div className="flex flex-col">
           {posts?.map((post, index) => (
             <div key={index}>
-              <div className="m-2 gap-2 flex items-center relative">
+              <div className="m-2 gap-2 flex items-center">
                 <div onClick={() => push(`/user/${post.user._id}`)}>
                   <Avatar>
                     <AvatarImage src={user?.profilePicture} />
@@ -84,7 +84,7 @@ export default function Home() {
                     setSelectedPost(post);
                   }}
                 >
-                  <MoreHorizontal />
+                  <Ellipsis></Ellipsis>
                 </div>
               </div>
               <div>

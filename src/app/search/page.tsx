@@ -3,10 +3,11 @@
 import { Input } from "@/components/ui/input";
 import { useUser } from "@/providers/AuthProvider";
 import { ChangeEvent, useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const Page = () => {
   const { token } = useUser();
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState({});
 
   const inputValueHandler = (event: ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -25,10 +26,11 @@ const Page = () => {
         },
       }
     );
+    if (response.ok) console.log(response);
   };
 
   useEffect(() => {
-    getUser();
+    if (inputValue) getUser();
   }, [inputValue]);
   return (
     <div>

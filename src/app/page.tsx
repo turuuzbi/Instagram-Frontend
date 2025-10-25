@@ -41,6 +41,7 @@ export default function Home() {
         Authorization: `Bearer ${token}`,
       },
     });
+    showPosts();
   };
 
   useEffect(() => {

@@ -5,9 +5,10 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Dispatch, SetStateAction, useState } from "react";
-import { PostType } from "../selfposts/page";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { PostType } from "../selfposts/page";
+import { useUser } from "@/providers/AuthProvider";
 
 export type EditPostDialogProps = {
   isOpen: boolean;
@@ -20,17 +21,25 @@ export const EditPostDialog = ({
   setIsOpen,
   selectedPost,
 }: EditPostDialogProps) => {
+  const { token } = useUser();
   const [caption, setCaption] = useState(selectedPost.caption);
 
   const handleEdit = async () => {
-    // handle your backend edit request here
     console.log("edit caption:", caption);
     setIsOpen(false);
   };
 
   const handleDelete = async () => {
-    // handle your backend delete request here
-    console.log("delete post:", selectedPost._id);
+    await fetch(`http://localhost:5555/post/delete`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        postId: selectedPost._id,
+      }),
+    });
     setIsOpen(false);
   };
 
