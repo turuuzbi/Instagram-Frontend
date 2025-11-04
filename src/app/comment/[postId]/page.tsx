@@ -6,7 +6,7 @@ import XButton from "../../icons/xbutton";
 import { User, useUser } from "@/providers/AuthProvider";
 import { useParams, useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
-import { Smile } from "lucide-react";
+import { Smile, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -29,15 +29,10 @@ const Page = () => {
   const { token } = useUser();
   const [commentInfo, setCommentInfo] = useState<CommentType[]>([]);
   const { postId } = useParams();
-  const [inputValue, setInputValue] = useState({
-    comment: "",
-  });
+  const [inputValue, setInputValue] = useState("");
 
   const inputValueHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setInputValue((prev) => {
-      return { ...prev, comment: value };
-    });
+    setInputValue(event.target.value);
   };
 
   const createComment = async () => {
@@ -48,8 +43,8 @@ const Page = () => {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({
-        comment: inputValue.comment,
-        postId: postId,
+        comment: inputValue,
+        postId,
       }),
     });
     if (response.ok) {
@@ -57,9 +52,29 @@ const Page = () => {
     } else {
       toast.error("failed to make comment :(");
     }
+    await getComments();
   };
 
-  const getUser = async () => {
+  const deleteComment = async (commentId: string) => {
+    const response = await fetch(`http://localhost:5555/comment/delete`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        commentId,
+      }),
+    });
+    if (response.ok) {
+      toast.success("successfully made comment!");
+    } else {
+      toast.error("failed to make comment :(");
+    }
+    await getComments();
+  };
+
+  const getComments = async () => {
     const response = await fetch(
       `http://localhost:5555/comment/get/${postId}`,
       {
@@ -74,9 +89,9 @@ const Page = () => {
       setCommentInfo(gotUser);
     }
   };
-  console.log(commentInfo);
+
   useEffect(() => {
-    getUser();
+    getComments();
   }, [token]);
 
   return (
@@ -117,7 +132,12 @@ const Page = () => {
                   </div>
                   <div className="font-bold">{c.user.username}</div>
                 </div>
-                <div>{c.comment}</div>
+                <div className="flex">
+                  <div>{c.comment}</div>
+                  <div onClick={() => deleteComment(c._id)}>
+                    <Trash></Trash>
+                  </div>
+                </div>
               </div>
             );
           })}

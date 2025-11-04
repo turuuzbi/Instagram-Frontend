@@ -15,43 +15,28 @@ const Page = () => {
   const [caption, setCaption] = useState("");
   const { token } = useUser();
 
-  const ACCESS_TOKEN = process.env.ACCESS_TOKEN;
-
   const generateImage = async () => {
     if (!prompt.trim()) return;
 
     setImageURL("");
 
     try {
-      const response = await fetch(
-        `https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${ACCESS_TOKEN}`,
-          },
-          body: JSON.stringify({
-            inputs: prompt,
-            parameters: {
-              negative_prompt: "blurry, bad quality, distorted",
-              num_interface_steps: 20,
-              guidance_scale: 8,
-            },
-          }),
-        }
-      );
+      const response = await fetch("/api/generate", {
+        method: "POST",
+        body: JSON.stringify({ prompt }),
+      });
 
-      if (!response.ok) {
-        throw new Error(`HTTP Error! Status: ${response.status}`);
-      }
+      if (!response.ok) throw new Error("Failed to generate");
 
       const blob = await response.blob();
+
       const file = new File([blob], "generated.png", { type: "image/png" });
+
       const uploaded = await upload(file.name, file, {
         access: "public",
         handleUploadUrl: "/api/upload",
       });
+
       setImageURL(uploaded.url);
     } catch (err) {
       toast.error("Failed to generate image. Try again!");

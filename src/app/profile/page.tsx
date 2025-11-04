@@ -30,6 +30,11 @@ const Page = () => {
     setPosts(gotposts);
   };
 
+  const logOutHandler = () => {
+    localStorage.removeItem("token");
+    showPosts();
+  };
+
   useEffect(() => {
     if (token) {
       showPosts();
@@ -45,6 +50,13 @@ const Page = () => {
         </Button>
       </div>
       <UserPost posts={posts}></UserPost>
+      <Button
+        onClick={logOutHandler}
+        variant="ghost"
+        className="bg-red-500 text-white"
+      >
+        Log out!
+      </Button>
       <Footer></Footer>
     </div>
   );

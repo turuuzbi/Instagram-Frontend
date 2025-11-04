@@ -1,22 +1,22 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { useUser } from "@/providers/AuthProvider";
+import { User, useUser } from "@/providers/AuthProvider";
 import { ChangeEvent, useEffect, useState } from "react";
-import { toast } from "sonner";
+import { Footer } from "../_components/Footer";
 
 const Page = () => {
   const { token } = useUser();
-  const [inputValue, setInputValue] = useState({});
+  const [inputValue, setInputValue] = useState("");
+  const [users, setUsers] = useState<User[] | null>([]);
 
   const inputValueHandler = (event: ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setInputValue((prev) => {
-      return { ...prev, value };
-    });
+    setInputValue(event.target.value);
   };
 
+  if (!users) return;
   const getUser = async () => {
+    if (!inputValue) return;
     const response = await fetch(
       `http://localhost:5555/searchUsers/${inputValue}`,
       {
@@ -26,18 +26,33 @@ const Page = () => {
         },
       }
     );
-    if (response.ok) console.log(response);
+    if (response.ok) {
+      const data = await response.json();
+      setUsers(data);
+    }
   };
 
   useEffect(() => {
-    if (inputValue) getUser();
+    if (inputValue.trim()) {
+      getUser();
+    }
+    if (inputValue === "") {
+      setUsers([]);
+    }
   }, [inputValue]);
+
   return (
     <div>
       <Input
         placeholder="Search here..."
         onChange={(e) => inputValueHandler(e)}
       />
+      <div>
+        {users.map((user, index) => {
+          return <div key={index}>{user.username}</div>;
+        })}
+      </div>
+      <Footer />
     </div>
   );
 };

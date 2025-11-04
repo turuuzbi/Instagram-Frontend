@@ -25,7 +25,17 @@ export const EditPostDialog = ({
   const [caption, setCaption] = useState(selectedPost.caption);
 
   const handleEdit = async () => {
-    console.log("edit caption:", caption);
+    await fetch(`http://localhost:5555/post/edit`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        caption,
+        postId: selectedPost._id,
+      }),
+    });
     setIsOpen(false);
   };
 
