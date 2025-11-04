@@ -27,7 +27,7 @@ export default function UserPage() {
     if (response.ok) {
       const gotUser = await response.json();
       setUserInfo(gotUser);
-      if (userInfo?.followers.includes(user?._id!)) {
+      if (userInfo?.followers.includes(user?._id ?? '')) {
         setIsFollowing(true);
       } else {
         setIsFollowing(false);

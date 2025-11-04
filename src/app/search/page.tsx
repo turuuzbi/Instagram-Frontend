@@ -14,7 +14,17 @@ const Page = () => {
     setInputValue(event.target.value);
   };
 
+  useEffect(() => {
+    if (inputValue.trim()) {
+      getUser();
+    }
+    if (inputValue === "") {
+      setUsers([]);
+    }
+  }, [inputValue]);
+
   if (!users) return;
+
   const getUser = async () => {
     if (!inputValue) return;
     const response = await fetch(
@@ -31,15 +41,6 @@ const Page = () => {
       setUsers(data);
     }
   };
-
-  useEffect(() => {
-    if (inputValue.trim()) {
-      getUser();
-    }
-    if (inputValue === "") {
-      setUsers([]);
-    }
-  }, [inputValue]);
 
   return (
     <div>

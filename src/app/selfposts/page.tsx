@@ -96,7 +96,7 @@ export default function Home() {
                 <div className="m-2">
                   <div className="flex gap-2">
                     <div onClick={() => toggleLike(post._id)}>
-                      {post.like.includes(user?._id!) ? (
+                      {post.like.includes(user?._id ?? "") ? (
                         <Heart color="red" fill="red" />
                       ) : (
                         <Heart />
